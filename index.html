@@ -2133,6 +2133,39 @@
   }
 ];
 
+
+    
+fetch('questions.json')
+  .then(res => res.json())
+  .then(rawData => {
+      // 将原始数据转换为所需格式
+      const transformedQuestions = rawData.map(item => {
+          // 构建选项数组
+          const options = [
+              item["Option A"],
+              item["Option B"],
+              item["Option C"],
+              item["Option D"]
+          ];
+          // 将正确答案字母转换为索引 (A->0, B->1, C->2, D->3)
+          const correctMap = { "A": 0, "B": 1, "C": 2, "D": 3 };
+          const correctIndex = correctMap[item["Correct Answer"]];
+
+          return {
+              id: item.ID,
+              category: item.Category,
+              text: item.Title,
+              options: options,
+              correct: correctIndex,
+              explanation: item.Explanation
+          };
+      });
+      questions = transformedQuestions;
+      initApp();
+  })
+  .catch(...);
+
+    
     // --------------------------------------------------------------
     // 2. 辅助数据
     // --------------------------------------------------------------
