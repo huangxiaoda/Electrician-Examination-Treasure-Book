@@ -184,10 +184,81 @@
             font-weight: 700;
             color: #007aff;
         }
+   
+    /* 启动封面样式 */
+#splashScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb4d);
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.5s ease;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.splash-logo {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-15px); }
+}
+
+.splash-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    margin-bottom: 12px;
+}
+
+.splash-subtitle {
+    font-size: 18px;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 30px;
+}
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+  
     </style>
 </head>
 <body>
 
+<!-- 启动封面 -->
+<div id="splashScreen">
+    <div class="splash-logo">⚡</div>
+    <div class="splash-title">Electrician Exam Prep</div>
+    <div class="splash-subtitle">Master the NEC 2023</div>
+    <div class="loader"></div>
+</div>
+    
 <!-- 底部导航栏 -->
 <div class="tab-bar">
     <div class="tab-item" data-view="practice">📖 Practice</div>
@@ -2782,7 +2853,26 @@ const categoryMapping = {
         document.getElementById('backToListBtn').addEventListener('click', backToList);
     }
 
-    init();
+    //init();
+   
+    // 等待 DOM 和题库数据加载完成后，先显示封面，再延迟进入练习页
+window.addEventListener('DOMContentLoaded', () => {
+    // 封面默认已显示（因为 HTML 中已存在）
+    // 延迟 2 秒后隐藏封面并初始化应用
+    setTimeout(() => {
+        const splash = document.getElementById('splashScreen');
+        if (splash) {
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.style.display = 'none';
+            }, 500);
+        }
+        // 调用原有的初始化函数
+        init();
+    }, 2000);
+});
+
+
 </script>
 </body>
 </html>
