@@ -3653,25 +3653,7 @@ const categoryMapping = {
     }
 
     //init();
-   
-    // 等待 DOM 和题库数据加载完成后，先显示封面，再延迟进入练习页
-window.addEventListener('DOMContentLoaded', () => {
-    // 封面默认已显示（因为 HTML 中已存在）
-    // 延迟 2 秒后隐藏封面并初始化应用
-    setTimeout(() => {
-        const splash = document.getElementById('splashScreen');
-        if (splash) {
-            splash.style.opacity = '0';
-            setTimeout(() => {
-                splash.style.display = 'none';
-            }, 500);
-        }
-        // 调用原有的初始化函数
-        init();
-    }, 2000);
-});
 
-    
 // 1. Paddle 初始化
     Paddle.Environment.set('sandbox'); // 测试环境用，上架前改 production
     Paddle.Initialize({ token: 'YOUR_PADDLE_CLIENT_SIDE_TOKEN' }); // 替换为你的 Token
@@ -3740,6 +3722,22 @@ window.addEventListener('DOMContentLoaded', () => {
     // 启动应用
     loadQuestions();
     
+    // 等待 DOM 和题库数据加载完成后，先显示封面，再延迟进入练习页
+window.addEventListener('DOMContentLoaded', () => {
+    // 延迟 2 秒后隐藏封面并初始化应用
+    setTimeout(() => {
+        const splash = document.getElementById('splashScreen');
+        if (splash) {
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.style.display = 'none';
+            }, 500);
+        }
+        // 调用原有的初始化函数
+        init();
+    }, 2000);
+});
+
 </script>
 </body>
 </html>
