@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Pricing - Electrician Exam Prep</title>
+    <!-- Paddle SDK -->
+    <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fc 0%, #e9eef5 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #1a2a3a;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .subhead {
+            text-align: center;
+            color: #5a6e8a;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .pricing-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+            padding: 30px 25px 35px;
+            width: 100%;
+            max-width: 320px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 40px -12px rgba(0,0,0,0.15);
+        }
+
+        .card.popular {
+            border: 2px solid #f39c12;
+            position: relative;
+            background: #fffef7;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #f39c12;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .plan-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1a2a6c;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 15px 0;
+            color: #1e2f5e;
+        }
+
+        .price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #6c7a8e;
+        }
+
+        .description {
+            color: #5a6e8a;
+            margin: 15px 0;
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+
+        .features {
+            list-style: none;
+            margin: 20px 0;
+            text-align: left;
+            flex-grow: 1;
+        }
+
+        .features li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #2c3e50;
+        }
+
+        .features li::before {
+            content: "✓";
+            color: #2ecc71;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            background: #1a2a6c;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #1a2a6c;
+            border: 2px solid #1a2a6c;
+        }
+
+        .btn-outline:hover {
+            background: #1a2a6c;
+            color: white;
+        }
+
+        .btn:hover {
+            background: #2c3e8c;
+            transform: scale(1.02);
+        }
+
+        .free-btn {
+            background: #e9ecef;
+            color: #2c3e50;
+            border: none;
+        }
+
+        .free-btn:hover {
+            background: #d4d9e2;
+        }
+
+        .legal-links {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.85rem;
+            color: #6c7a8e;
+            border-top: 1px solid #dce3ec;
+            padding-top: 30px;
+        }
+
+        .legal-links a {
+            color: #1a2a6c;
+            text-decoration: none;
+            margin: 0 12px;
+        }
+
+        .legal-links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 700px) {
+            body { padding: 20px; }
+            h1 { font-size: 1.8rem; }
+            .card { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>⚡ Electrician Exam Prep</h1>
+    <div class="subhead">Master the NEC 2023 with confidence. Choose your plan.</div>
+
+    <div class="pricing-grid">
+        <!-- 免费版 -->
+        <div class="card">
+            <div class="plan-name">Free</div>
+            <div class="price">$0<span> / forever</span></div>
+            <div class="description">Try before you upgrade</div>
+            <ul class="features">
+                <li>30 practice questions</li>
+                <li>Basic progress tracking</li>
+                <li>Limited categories</li>
+            </ul>
+            <button class="btn free-btn" id="freeBtn">Get Started Free</button>
+        </div>
+
+        <!-- 月度订阅（推荐） -->
+        <div class="card popular">
+            <div class="popular-badge">🔥 MOST POPULAR</div>
+            <div class="plan-name">Monthly Pro</div>
+            <div class="price">$9.99<span> / month</span></div>
+            <div class="description">Full access, cancel anytime</div>
+            <ul class="features">
+                <li>All 125+ questions</li>
+                <li>Detailed explanations</li>
+                <li>Mistakes book</li>
+                <li>Progress statistics</li>
+                <li>Priority email support</li>
+            </ul>
+            <button class="btn" id="monthlyBtn">Subscribe Monthly</button>
+        </div>
+
+        <!-- 终身买断 -->
+        <div class="card">
+            <div class="plan-name">Lifetime</div>
+            <div class="price">$49.99<span> / one-time</span></div>
+            <div class="description">Pay once, own forever</div>
+            <ul class="features">
+                <li>All 125+ questions</li>
+                <li>All future updates included</li>
+                <li>Mistakes book</li>
+                <li>Progress statistics</li>
+                <li>Priority support + lifetime access</li>
+            </ul>
+            <button class="btn" id="lifetimeBtn">Buy Lifetime</button>
+        </div>
+    </div>
+
+    <div class="legal-links">
+        <a href="/terms.html" target="_blank">Terms of Service</a> |
+        <a href="/privacy.html" target="_blank">Privacy Policy</a> |
+        <a href="/refund.html" target="_blank">Refund Policy</a>
+    </div>
+</div>
+
+<script>
+    // 替换为你在 Paddle 后台创建的真实 Price ID
+    const PRICE_IDS = {
+        monthly: "pri_monthly_xxxxx",   // 替换你的月度价格ID
+        lifetime: "pri_lifetime_xxxxx"  // 替换你的终身价格ID
+    };
+
+    // 初始化 Paddle（沙箱环境测试，上架前改为 production）
+    Paddle.Environment.set('sandbox');
+    Paddle.Initialize({
+        token: 'test_xxxxxxxxxxxxxxxxx' // 替换为你的 Client-side Token
+    });
+
+    // 购买处理函数
+    function handlePurchase(priceId) {
+        if (!priceId || priceId === 'pri_monthly_xxxxx' || priceId === 'pri_lifetime_xxxxx') {
+            alert("Please configure valid Price IDs in the code. Contact support.");
+            return;
+        }
+        Paddle.Checkout.open({
+            items: [{ priceId: priceId, quantity: 1 }],
+            settings: {
+                displayMode: 'overlay',
+                successUrl: 'electricianexam://payment-success'  // 与您的 URL Scheme 一致
+            }
+        });
+    }
+
+    // 免费版处理
+    document.getElementById('freeBtn').addEventListener('click', () => {
+        // 免费版直接跳转到 App 的练习页面（或者显示提示）
+        // 这里示例：提示用户下载/打开 App
+        alert("Free tier is available inside the app. Please download Electrician Exam Prep to get started.");
+        // 如果需要直接跳转 App Store，可以加上：
+        // window.location.href = "https://apps.apple.com/app/idXXXXXX";
+    });
+
+    document.getElementById('monthlyBtn').addEventListener('click', () => {
+        handlePurchase(PRICE_IDS.monthly);
+    });
+
+    document.getElementById('lifetimeBtn').addEventListener('click', () => {
+        handlePurchase(PRICE_IDS.lifetime);
+    });
+</script>
+</body>
+</html>
