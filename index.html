@@ -3662,6 +3662,22 @@ function openPurchaseModal() {
     if (modal) modal.style.display = 'flex';
 }
 
+// 检查 URL 参数，如果包含 openModal=true，则自动打开购买弹窗
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('openModal') === 'true') {
+    // 确保弹窗相关函数和元素已加载
+    if (typeof openPurchaseModal === 'function') {
+        openPurchaseModal();
+    } else {
+        // 如果页面还未完全加载，延迟执行
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof openPurchaseModal === 'function') openPurchaseModal();
+        });
+    }
+    // 清除 URL 中的参数，避免刷新页面时重复打开
+    history.replaceState({}, document.title, window.location.pathname);
+}
+    
 // 全局函数：处理购买
 function handlePurchase(priceId) {
     Paddle.Checkout.open({
