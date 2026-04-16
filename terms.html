@@ -8,12 +8,23 @@
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; color: #333; }
         h1, h2 { color: #1a2a6c; }
         .last-updated { color: #666; font-size: 0.9em; margin-bottom: 30px; }
+        .back-button {
+            display: inline-block;
+            background: #007aff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
    <!-- 增加返回键按钮 -->
-<div style="text-align: center; margin-top: 40px;">
-    <button onclick="goBackToApp()" style="background: #007aff; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer;">← Back to Purchase</button>
+   button class="back-button" onclick="goBackToApp()">← Back to Purchase</button>
 </div>
     <h1>Terms of Service</h1>
     <div class="last-updated">Last Updated: April 11, 2026</div>
