@@ -42,5 +42,18 @@
 
     <h2>7. Contact Us</h2>
     <p>For any refund-related questions, please reach out to: <strong>lord_huang@nobalead.com</strong></p>
+
+<!-- 增加返回键按钮 -->
+<div style="text-align: center; margin-top: 40px;">
+    <button onclick="goBackToApp()" style="background: #007aff; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer;">← Back to Purchase</button>
+</div>
+
+<script>
+function goBackToApp() {
+    // 跳回主页面，并在 URL 中添加参数 openModal=true
+    window.location.href = 'index.html?openModal=true';
+}
+</script>
+
 </body>
 </html>
