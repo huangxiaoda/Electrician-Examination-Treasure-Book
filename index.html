@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <title>Electrician Exam Prep</title>
-   <!-- 引入 Paddle.js -->
-    <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+  
     <style>
          * {
             margin: 0;
@@ -358,7 +357,7 @@
 
 <script>
     // --------------------------------------------------------------
-    // 1. 题库数据（请替换成你自己的题目）
+    // 1. 题库数据
     // --------------------------------------------------------------
     const embeddedQuestions = [
   {
@@ -3650,75 +3649,64 @@ const categoryMapping = {
         document.getElementById('backToListBtn').addEventListener('click', backToList);
     }
 
-   
-
-// 1. Paddle 初始化（不依赖 DOM，可以放在外面）
-Paddle.Environment.set('sandbox');
-Paddle.Initialize({ token: 'live_786b759249fc2cc803472cfafa4'});
-
-// 全局函数：打开购买弹窗（在 DOM 加载后才能调用，但先声明）
+   // 全局函数：打开购买弹窗
 function openPurchaseModal() {
     const modal = document.getElementById('purchaseModal');
     if (modal) modal.style.display = 'flex';
 }
 
-// 检查 URL 参数，如果包含 openModal=true，则自动打开购买弹窗
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('openModal') === 'true') {
-    // 确保弹窗相关函数和元素已加载
-    if (typeof openPurchaseModal === 'function') {
-        openPurchaseModal();
-    } else {
-        // 如果页面还未完全加载，延迟执行
-        window.addEventListener('DOMContentLoaded', () => {
-            if (typeof openPurchaseModal === 'function') openPurchaseModal();
-        });
+// 苹果内购调用函数
+function purchaseProduct(productId) {
+    if (typeof uni === 'undefined') {
+        alert('Payment is only available inside the app. Please download the official app.');
+        return;
     }
-    // 清除 URL 中的参数，避免刷新页面时重复打开
-    history.replaceState({}, document.title, window.location.pathname);
-}
-    
-// 全局函数：处理购买
-function handlePurchase(priceId) {
-    Paddle.Checkout.open({
-        items: [{ priceId: priceId, quantity: 1 }],
-        settings: { displayMode: 'overlay', successUrl: 'electricianexam://payment-success' }
+    uni.requestPayment({
+        provider: 'appleiap',
+        productId: productId,
+        success: (res) => {
+            localStorage.setItem('isPro', 'true');
+            alert('Thank you! All questions are now unlocked.');
+            location.reload();
+        },
+        fail: (err) => {
+            console.error('Payment failed', err);
+            alert('Payment failed. Please try again later.');
+        }
     });
 }
 
-// 等待 DOM 和题库数据加载完成后，先显示封面，再延迟进入练习页
+// 恢复购买（简化提示，实际需对接苹果恢复接口）
+function restorePurchases() {
+    if (typeof uni === 'undefined') {
+        alert('Restore only works inside the app.');
+        return;
+    }
+    alert('Please sign in with your Apple ID. Your purchases will be restored automatically.');
+}
+
+// 等待 DOM 加载完成
 window.addEventListener('DOMContentLoaded', () => {
-    // ----- 1. 初始化支付相关的 DOM 元素和事件 -----
+    // 初始化支付相关 DOM 元素和事件
     const modal = document.getElementById('purchaseModal');
     const restoreBtn = document.getElementById('restorePurchaseBtn');
     const closeBtn = document.getElementById('closeModalBtn');
 
     if (modal && restoreBtn && closeBtn) {
-        // 恢复购买
-        restoreBtn.onclick = () => {
-            // 简单提示或调起订单历史
-            alert('Please log in or contact support@yourapp.com to restore your purchase.');
-        };
-        // 关闭弹窗
+        restoreBtn.onclick = restorePurchases;
         closeBtn.onclick = () => modal.style.display = 'none';
-        // 绑定购买选项点击事件
+        // 绑定购买选项点击事件（使用 product-id 属性）
         document.querySelectorAll('.purchase-option').forEach(opt => {
-            opt.onclick = () => handlePurchase(opt.dataset.priceId);
+            opt.onclick = () => {
+                const productId = opt.dataset.productId;
+                if (productId) purchaseProduct(productId);
+            };
         });
     }
 
-    // ----- 2. 支付成功回调（检测 URL 参数）-----
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('payment_success') === 'true') {
-        localStorage.setItem('isPro', 'true');
-        alert('Thank you! All questions are now unlocked.');
-        location.reload();
-        return; // 刷新后不会再执行后续
-    }
-
-    // ----- 3. 内容付费控制（决定加载哪些题目）-----
+    // 内容付费控制（免费版只显示前30题）
     let isPro = localStorage.getItem('isPro') === 'true';
-    let allQuestions = convertAdaloToInternal(embeddedQuestions); // 确保 embeddedQuestions 已定义
+    let allQuestions = convertAdaloToInternal(embeddedQuestions);
     let questions;
     if (isPro) {
         questions = allQuestions;
@@ -3732,12 +3720,9 @@ window.addEventListener('DOMContentLoaded', () => {
         banner.onclick = openPurchaseModal;
         document.body.insertBefore(banner, document.body.firstChild);
     }
+    window.questions = questions;
 
-    // 将 questions 挂到全局或传给 init 函数
-    window.questions = questions; // 或者直接修改你的全局变量
-
-    // ----- 4. 启动封面和主应用 -----
-    // 延迟 2 秒后隐藏封面并初始化应用
+    // 启动封面 2 秒后消失并初始化应用
     setTimeout(() => {
         const splash = document.getElementById('splashScreen');
         if (splash) {
@@ -3746,8 +3731,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 splash.style.display = 'none';
             }, 500);
         }
-        // 调用原有的初始化函数（你的 init 函数应该已经定义了）
-        init();
+        init(); // 您的 init 函数必须已定义
     }, 2000);
 });
 
